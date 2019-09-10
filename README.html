@@ -1,40 +1,196 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
 <head>
-  <title>Instant Markdown</title>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>README</title>
+ <link rel="stylesheet" href="./css/github-markdown.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
   <style>
-      .markdown-body {
-          box-sizing: border-box;
-          min-width: 200px;
-          max-width: 980px;
-          margin: 0 auto;
-          padding: 45px;
-      }
-    </style>
-<link rel="stylesheet" href="github-markdown.css">
-<link rel="stylesheet" href="github-highlight.css">
-<script src="/socket.io/socket.io.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
-<script>
-      var socket = io();
-      socket.on('markdown', function (msg) {
-        document.getElementById("markdown").innerHTML = msg;
-        var cursor = document.getElementById("instant-markdown-cursor");
-        if (cursor) {
-          cursor.scrollIntoView();
-        }
+	.markdown-body {
+		box-sizing: border-box;
+		min-width: 200px;
+		max-width: 980px;
+		margin: 0 auto;
+		padding: 45px;
+	}
 
-        MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
-      });
-      socket.on('disconnect', function() {
-        window.close();
-      })
-    </script>
+	@media (max-width: 767px) {
+		.markdown-body {
+			padding: 15px;
+		}
+	}
+</style>
 </head>
-
-<body>
-  <article id="markdown" class="markdown-body">
-  </article>
-</body>
-
+<article class="markdown-body">
+<h1 id="physics-based-animation-time-integration-of-mass-spring-systems-in-one-dimension">Physics-Based Animation – Time Integration of Mass-Spring Systems in One Dimension</h1>
+<blockquote>
+<p><strong>To get started:</strong> Clone this repository and all its <a href="https://git-scm.com/book/en/v2/Git-Tools-Submodules">submodule</a> dependencies using:</p>
+<pre><code>git clone --recursive https://github.com/dilevin/CSC2549-a1-mass-spring-1d.git</code></pre>
+</blockquote>
+<p><strong>Do not fork:</strong> Clicking “Fork” will create a <em>public</em> repository. If you’d like to use GitHub while you work on your assignment, then mirror this repo as a new <em>private</em> repository: https://stackoverflow.com/questions/10065526/github-how-to-make-a-fork-of-public-repository-private</p>
+<h2 id="introduction">Introduction</h2>
+<p>Welcome to Physics-Based Animation. This assignment has two purposes, (1) to familiarize you with the development tools used for assignments in the course and (2) to introduce you to some basic physics simulation concepts in one-dimension (1D).</p>
+<h3 id="prerequisite-installation">Prerequisite installation</h3>
+<p>On all platforms, we will assume you have installed cmake and a modern c++ compiler on Mac OS X<a href="#¹macusers">¹</a>, Linux<a href="#²linuxusers">²</a>, or Windows<a href="#³windowsusers">³</a>.</p>
+<p>We also assume that you have cloned this repository using the <code>--recursive</code> flag (if not then issue <code>git submodule update --init --recursive</code>).</p>
+<p><strong>Note:</strong> We only officially support these assignments on Ubuntu Linux 18.04 (the OS the teaching labs are running) and OSX 10.13 (the OS I use on my personal laptop). While they <em>should</em> work on other operating systems, we make no guarantees.</p>
+<p><strong>All grading of assignments is done on Linux 18.04</strong></p>
+<h3 id="layout">Layout</h3>
+<p>All assignments will have a similar directory and file layout:</p>
+<pre><code>README.md
+CMakeLists.txt
+main.cpp
+include/
+  function1.h
+  function2.h
+  ...
+src/
+  function1.cpp
+  function2.cpp
+  ...
+data/
+  ...
+...</code></pre>
+<p>The <code>README.md</code> file will describe the background, contents and tasks of the assignment.</p>
+<p>The <code>CMakeLists.txt</code> file setups up the cmake build routine for this assignment.</p>
+<p>The <code>main.cpp</code> file will include the headers in the <code>include/</code> directory and link to the functions compiled in the <code>src/</code> directory. This file contains the <code>main</code> function that is executed when the program is run from the command line.</p>
+<p>The <code>include/</code> directory contains one file for each function that you will implement as part of the assignment.</p>
+<p>The <code>src/</code> directory contains <em>empty implementations</em> of the functions specified in the <code>include/</code> directory. This is where you will implement the parts of the assignment.</p>
+<p>The <code>data/</code> directory contains <em>sample</em> input data for your program. Keep in mind you should create your own test data to verify your program as you write it. It is not necessarily sufficient that your program <em>only</em> works on the given sample data.</p>
+<h2 id="compilation">Compilation</h2>
+<p>This and all following assignments will follow a typical cmake/make build routine. Starting in this directory, issue:</p>
+<pre><code>mkdir build
+cd build
+cmake ..</code></pre>
+<p>If you are using Mac or Linux, then issue:</p>
+<pre><code>make</code></pre>
+<p>If you are using Windows, then running <code>cmake ..</code> should have created a Visual Studio solution file called <code>a1-mass-spring-1d.sln</code> that you can open and build from there. Building the raster project will generate an .exe file.</p>
+<p>Why don’t you try this right now?</p>
+<h2 id="execution">Execution</h2>
+<p>Once built, you can execute the assignment from inside the <code>build/</code> using</p>
+<pre><code>./a1-mass-spring-1d</code></pre>
+<h2 id="background">Background</h2>
+<p>Physics-based animation leverages techniques from classical mechanics, numerical solutions of partial and ordinary equations (and more !!). As this course progresses you will learn how to use such methods to produce compelling animations of a wide variety of real-world phenomena. This assignment will lay common mathematical and technical foundation on which to build some seriously cool stuff.</p>
+<p><strong>Github does not render the math in this Markdown. Please look at README.html to see the equations in their proper form</strong></p>
+<!-- mention where things are implemented inline -->
+<h3 id="newtons-second-law-of-motion">Newton’s Second Law of Motion</h3>
+<p>Isaac Newton famously described the near-earth motion of objects using three laws:</p>
+<ol type="1">
+<li><em>every object will remain at rest or in uniform motion in a straight line unless compelled to change its state by the action of an external force</em><br />
+</li>
+<li><em>the force acting on an object is equal to the time rate-of-change of the momentum</em><br />
+</li>
+<li><em>for every action there is an equal and opposite reaction</em></li>
+</ol>
+<p>The first law simply states an object cannot change its velocity unless a force acts on it. The third law is used to imply conservation of momentum. It is the second law that implies a mathematical model we can use to create moving pictures. That mathematical model can be expressed in 1D by the very famous formula</p>
+<p><span class="math display">\[ ma = f \]</span>.</p>
+<p>Here <span class="math inline">\(m\)</span> is the scalar mass of the object (typically measured in kg), <span class="math inline">\(a\)</span> is the acceleration of the object (typically measured in meters per second squared) and <span class="math inline">\(f\)</span> are the forces acting on the object (measured in Newtons, what an ego!).</p>
+<p>Because acceleration is the rate-of-change of velocity over time, and velocity is the rate-of-change of position over time, we can rewrite this in all its differential equation glory as</p>
+<p><span class="math display">\[ m\ddot{x} = f \]</span>,</p>
+<p>where we use <span class="math inline">\(\ddot{x}\)</span> to mean <span class="math inline">\(\frac{d^2x}{dt^2}\)</span>.</p>
+<p>Before we get busy solving this differential equation numerically, we are going to introduce <strong>one of the the most important concepts on this course</strong> – the variational perspective on classical mechanics.</p>
+<h3 id="the-variational-perspective">The Variational Perspective</h3>
+<p>We can thank <a href="https://en.wikipedia.org/wiki/Gottfried_Wilhelm_Leibniz">Leibniz</a> for introducing the quantities of kinetic and potential energy. As the course progresses you will see how understanding dynamic motion in terms of these quantities makes it easy to extend Newton’s Second Law to a wide variety of applications. Here we will get some intution in 1D by breifly reviewing how it arises from a variational principle.</p>
+<p>It was Hamilton who identified the approriate variational principle for describing mechanics, called <a href="https://en.wikipedia.org/wiki/Principle_of_least_action"><strong>the Principle of Least Action</strong></a>. The Principle of Least Action asserts that the trajectory of an object over time, is one that minimizes the integral, over time, of the difference between the kinetic and potential energy, or</p>
+<p><span class="math display">\[ \mathbf{q}\left(t\right) = \arg\min_{\mathbf{q}}\underbrace{\int_{t0}^{t1} T\left(\mathbf{q}, \dot{\mathbf{q}}\right)-V\left(\mathbf{q}, \dot{\mathbf{q}}\right) dt}_{\mbox{Action}} \]</span>,</p>
+<p>In this course we use <span class="math inline">\(T\)</span> to represent the kinetic energy of an object and <span class="math inline">\(V\)</span> to represent its potential energy. The mysterious quantity <span class="math inline">\(\mathbf{q}\)</span> are the “generalized coordinates” of the system and, briefly all I’ll say is that they describe the “configuration” of the mechanical system (don’t panic, more soon!).</p>
+<p>Note: The quantity <span class="math inline">\(T-V\)</span> is typically referred to as the Lagrangian, named after <a href="https://en.wikipedia.org/wiki/Joseph-Louis_Lagrange">Lagrange</a>.</p>
+<p>Finding the conditions under which the Principle of Least Action is stationary can be done using the Calculus of Variations (Top 3 in the most useful things to know if you are a graphics researcher!). It turns out that if <span class="math inline">\(\mathbf{q}\left(t\right)\)</span> satisfies the differential equations (the Euler-Lagrange Equations)</p>
+<p><span class="math display">\[ \frac{d}{dt}\left(\frac{\partial L}{\partial \dot{\mathbf{q}}}\right) = -\frac{\partial L}{\partial \mathbf{q}}\]</span>,</p>
+<p>then <span class="math inline">\(\mathbf{q\left(t\right)}\)</span> is a physically valid trajectory. In this way we can see that as long as we can define appropriate generalized coordinates along with kinetic and potential energies we can describe the motion of a physical system. This</p>
+<p>As physics simulation connoiseurs, this makes our job conceptually easy, we just need to solve this differential equation. Let’s look at how we do that for our 1D mass spring system (and thereby get a good grade on this assignment).</p>
+<h3 id="the-1d-mass-spring-system">The 1D Mass-Spring System</h3>
+<p>You will soon see that the variational machinery above gives us a cookbook method for describing physics-based motion. To do this we are going to need to define three quantities</p>
+<ol type="1">
+<li>Our nebulous <span class="math inline">\(\mathbf{q}\)</span>’s</li>
+<li>The kinetic energy of mass spring, <span class="math inline">\(T\)</span></li>
+<li>The potential energy of mass spring, <span class="math inline">\(V\)</span></li>
+</ol>
+<figure>
+<img src="images/massspring.gif" alt="" /><figcaption>A particle attached to a zero rest length spring</figcaption>
+</figure>
+<p>The first task is to choose <span class="math inline">\(\mathbf{q}\)</span> so that all permissable positions (the configurations) of our mass-spring system can be written as <span class="math inline">\(\mathbf{x}\left(t\right) = \mathbf{f}\left(\mathbf{q}\left(t\right)\right)\)</span>. Here <span class="math inline">\(\mathbf{x\left(t\right)}\)</span> is just the position of the center of our particle in 1D Euclidean space and so an easy choice for <span class="math inline">\(\mathbf{q} = \mathbf{x}\)</span>.</p>
+<p>Having picked some reasonable generalized coordinates we can now define <span class="math inline">\(T\)</span> and <span class="math inline">\(V\)</span>. In 1D, the definition of kinetic energy is likely very familiar</p>
+<p><span class="math display">\[ T = \frac{1}{2}m\dot{\mathbf{x}}^2 \]</span>,</p>
+<p>where <span class="math inline">\(m\)</span> is the mass of the particle.</p>
+<p>The potential energy in this system comes from the titular spring. Here we can use a simple quadratic energy defined as</p>
+<p><span class="math display">\[ V = \frac{1}{2}k\mathbf{x}^2\]</span>,</p>
+<p>where <span class="math inline">\(k\)</span> is the “stiffness of the spring”, the proportionality constant that converts a measure of stretch or compression to an energy.</p>
+<p>From the Euler-Lagrange equations we can show that the motion of this single mass and spring satisfies</p>
+<p><span class="math display">\[m\ddot{\mathbf{x}} = -k\mathbf{x},\]</span></p>
+<p>in other words, it satisfies Newton’s Second Law in its standard form, with the forces given by <a href="https://en.wikipedia.org/wiki/Hooke%27s_law">Hooke’s Law</a>. While this example might seem trivial, later in the course we’ll see examples where applying the Principle of Least Action will be crucial for deriving equations of motion for more complicated objects.</p>
+<h3 id="numerical-time-integration">Numerical Time Integration</h3>
+<p>A standard approach to solving the <em>second-order</em> differential equation above is to transform it into the coupled first-order system</p>
+<p><span class="math display">\[\begin{eqnarray*} 
+m\dot{\mathbf{v}} &amp;=&amp; -k\mathbf{x} \\ 
+\dot{\mathbf{x}} &amp;=&amp; \mathbf{v}  
+\end{eqnarray*}\]</span></p>
+<p>where we introduce the velocity of the mass-spring system as a seperate variable and the second equation enforces the approriate relationship between position and velocity. Now, given some initial position and velocity (together called the intial state) for the mass-spring system, our goal is to compute subsequent states which represent the trajectory of the particle over time. This process is called time integration because we are <em>integrating</em> the first-order differential equation, across time, to create the solution. Because almost all the systems we deal with will not admit analytical solutions, we are going to do this numerically. Let’s take a look at four of the most common integration schemes.</p>
+<h3 id="numerical-solution-attempt-1-forward-euler-integration">Numerical Solution Attempt #1: Forward Euler Integration</h3>
+<p>Forward Euler is the simplest algorithm for numerical integration of an ordinary differential equation. It’s so popular that it even got a shout out in the blockbuster movie <a href="https://www.insidescience.org/news/exploring-math-hidden-figures">Hidden Figures</a>. Sadly, we will quickly see that, for elastic objects, like springs, it has some pretty serious downfalls.</p>
+<p>Forward Euler discretizes our differential equation by replacing all derivatives with first-order, finite difference approximations of the form</p>
+<p><span class="math display">\[ \dot{y}^{t} = \frac{y^{t+1} - y^{t}}{\Delta t},\]</span></p>
+<p>where we use superscripts to indicate whether we are accessing a variable at the current (<span class="math inline">\(t\)</span>) or next (<span class="math inline">\(t+1\)</span>) timestep. By rearranging we see that</p>
+<p><span class="math display">\[y^{t+1} = y^{t} + \Delta t \dot{y}^{t}\]</span></p>
+<p>Following the same basic approach for our coupled, first-order system yields a scheme to compute an updated state for our mass spring system.</p>
+<h3 id="attempt-2-runge-kutta-integration">Attempt #2: Runge-Kutta Integration</h3>
+<p>Explicit Runge-Kutta methods (which is what you will implement here) rely on multiple evalations of the right hand side of the ODE to approximate its time integral. In particular, <span class="math inline">\(4^{th}\)</span> order <a href="https://en.wikipedia.org/wiki/Runge–Kutta_methods">Runge-Kutta</a> requires four such evaluations and combines them to compute an update of the object state which is much better behaved than that of Forward Euler.</p>
+<h3 id="attempt-3-implicit-backward-euler">Attempt #3: Implicit (Backward) Euler</h3>
+<p>The key difference between Implicit, or Backward, Euler and Forward Euler time integration is that Implicit Euler no longer just relies on the configuration and velocity of the mass-spring at the current time step. Instead it tries to look into the future to make the integration more robust. Consider the following differential equation</p>
+<p><span class="math display">\[ K\dot{\mathbf{y}} = \mathbf{f}\left(\mathbf{y}\right).\]</span></p>
+<p>Backward Euler discretizes the time derivitive using the same first-order finite difference as Forward Euler. However, while Forward Euler would choose to evaluate the function <span class="math inline">\(\mathbf{f}\)</span> at time <span class="math inline">\(t\)</span>, Backward Euler chooses to evaluate it at time <span class="math inline">\(t+1\)</span> yielding the following update scheme</p>
+<p><span class="math display">\[ K\mathbf{y}^{t+t} = K\mathbf{y}^{t} +\Delta t\mathbf{f}\left(\mathbf{y}^{t+1}\right).\]</span></p>
+<p>If <span class="math inline">\(\mathbf{f}\)</span> is a linear function in <span class="math inline">\(\mathbf{y}\)</span>, this update can be efficiently evaluated (you’ll do it in this assignment!) . ### Attempt #4: Symplectic Euler</p>
+<p><a href="https://en.wikipedia.org/wiki/Semi-implicit_Euler_method">Symplectic Euler</a>, so named because it preserves the area carved out by an objects phase-space trajectory, is well suited to the types of coupled, first-order ordinary differential equations we will be solving. Given the system</p>
+<p><span class="math display">\[\begin{eqnarray*} 
+m\dot{\mathbf{v}} &amp;=&amp; \mathbf{f}\left(\mathbf{x}\right) \\ 
+\dot{\mathbf{x}} &amp;=&amp; \mathbf{v}  
+\end{eqnarray*}, \]</span></p>
+<p>Symplectic Euler applies the updates</p>
+<p><span class="math display">\[m\mathbf{v}^{t+1} = m\mathbf{v}^{t} + \Delta t \mathbf{f}\left(\mathbf{x}^{t}\right)\]</span></p>
+<p>and then</p>
+<p><span class="math display">\[\mathbf{x}^{t+1} = \mathbf{x}^{t} + \Delta t \mathbf{v}^{t+1}.\]</span></p>
+<h2 id="tasks">Tasks</h2>
+<p>In this assignment we’ll primarily be interested in the energetic behaviour of our mass-spring system when integrated with the four time integrators described above. The user interface for this assignment includes a window which displays the trajectory of the mass-spring system in the <a href="https://en.wikipedia.org/wiki/Phase_plane"><em>phase plane</em></a> of the mass spring system over time. Images of the correct phase plane trajectories are included below.</p>
+<h3 id="groundrules">Groundrules</h3>
+<p>Implementations of nearly any task you’re asked to implemented in this course can be found online. Do not copy these and avoid googling for code; instead, search the internet for explanations. Many topics have relevant wikipedia articles. Use these as references. Always remember to cite any references in your comments.</p>
+<h3 id="implementation-notes">Implementation Notes</h3>
+<p>For this course most functions will be implemented in <strong>.cpp</strong> files. In this assignment the only exception is that time integrators are implemented in <strong>.h</strong> files. This is due to the use of lambda functions to pass force data to the time integration algorithms.</p>
+<h3 id="srcdv_spring_particle_particle_dq.cpp">src/dV_spring_particle_particle_dq.cpp</h3>
+<p>Compute the derivative of the potential energy with respect to the generalized coordinates.</p>
+<h3 id="srcd2v_spring_particle_particle_dq2.cpp">src/d2V_spring_particle_particle_dq2.cpp</h3>
+<p>Compute the second derivative of the potential energy with respect to the generalized coordinates.</p>
+<h3 id="includeforward_euler.h">include/forward_euler.h</h3>
+<p>Advance the mass spring system one step forward in time using the Forward Euler algorithm.</p>
+<figure>
+<img src="images/forward_euler.gif" alt="" /><figcaption>Phase space trajectory for Forward Euler integration</figcaption>
+</figure>
+<p>Forward Euler is the default integrator used by the assignment code.</p>
+<h3 id="includerunge_kutta.h">include/runge_kutta.h</h3>
+<p>Advance the mass spring system one step forward in time using the <span class="math inline">\(4^{th} order\)</span> Runge-Kutta algorithm.</p>
+<figure>
+<img src="images/rk4.gif" alt="" /><figcaption>Phase space trajectory for Runge-Kutta integration</figcaption>
+</figure>
+<p>To run the assignment code with the Runge-Kutta algorithm use</p>
+<pre><code>./a1-mass-spring-1d &#39;rk&#39;</code></pre>
+<h3 id="includebackward_euler.h">include/backward_euler.h</h3>
+<p>Advance the mass spring system one step forward in time using the Backward Euler algorithm</p>
+<figure>
+<img src="images/backward_euler.gif" alt="" /><figcaption>Phase space trajectory for Backward Euler integration</figcaption>
+</figure>
+<p>To run the assignment code with the Backward Euler algorithm use</p>
+<pre><code>./a1-mass-spring-1d &#39;be&#39;</code></pre>
+<h3 id="includesymplectic_euler.h">include/symplectic_euler.h</h3>
+<p>Advance the mass spring system one step forward in time using the Symplectic Euler algorithm</p>
+<figure>
+<img src="images/symplectic_euler.gif" alt="" /><figcaption>Phase space trajectory for Symplectic Euler integration</figcaption>
+</figure>
+<p>To run the assignment code with the Symplectic Euler algorithm use</p>
+<pre><code>./a1-mass-spring-1d &#39;se&#39;</code></pre>
+</article>
 </html>
