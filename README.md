@@ -187,7 +187,7 @@ Forward Euler discretizes our differential equation by replacing all derivatives
 
 $$ \dot{y}^{t} = \frac{y^{t+1} - y^{t}}{\Delta t},$$
 
-where we use subscripts to indicate whether we are accessing a variable at the current ($t$) or next ($t+1$) timestep. By rearranging we see that
+where we use superscripts to indicate whether we are accessing a variable at the current ($t$) or next ($t+1$) timestep. By rearranging we see that
 
 $$y^{t+1} = y^{t} + \Delta t \dot{y}^{t}$$
 
@@ -211,17 +211,13 @@ In this assignment we'll primarily be interested in the energetic behaviour of o
 
 Implementations of nearly any task you're asked to implemented in this course can be found online. Do not copy these and avoid googling for code; instead, search the internet for explanations. Many topics have relevant wikipedia articles. Use these as references. Always remember to cite any references in your comments.
 
-### src/T_particle.cpp
-
-Compute the kinetic energy of a particle with a given mass.
-
-### src/V_spring_particle_particle.cpp
-
-Compute the potential energy of a particle with a given stiffness.
-
 ### src/dV_spring_particle_particle_dq.cpp
 
-Compute the derivative of the potential energy with respect to the generalized coordinartes. 
+Compute the derivative of the potential energy with respect to the generalized coordinates. 
+
+### src/d2V_spring_particle_particle_dq2.cpp
+
+Compute the second derivative of the potential energy with respect to the generalized coordinates.
 
 ### include/forward_euler.h 
 
