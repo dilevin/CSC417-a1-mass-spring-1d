@@ -195,13 +195,36 @@ Following the same basic approach for our coupled, first-order system yields a s
 
 ### Attempt #2: Runge-Kutta Integration
 
-**COMING SOON**
+Explicit Runge-Kutta methods (which is what you will implement here) rely on multiple evalations of the right hand side of the ODE to approximate its time integral. In particular, $4^{th}$ order [Runge-Kutta](https://en.wikipedia.org/wiki/Runge–Kutta_methods) requires four such evaluations and combines them to compute an update of the object state which is much better behaved than that of Forward Euler.  
 
-### Attempt #3: Implicit Integration 
-**COMING SOON**
+### Attempt #3: Implicit (Backward) Euler 
 
+The key difference between Implicit, or Backward, Euler and Forward Euler time integration is that Implicit Euler no longer just relies on the configuration and velocity of the mass-spring at the current time step. Instead it tries to look into the future to make the integration more robust. Consider the following differential equation
+
+$$ K\dot{\mathbf{y}} = \mathbf{f}\left(\mathbf{y}\right).$$
+
+Backward Euler discretizes the time derivitive using the same first-order finite difference as Forward Euler. However, while Forward Euler would choose to evaluate the function $\mathbf{f}$ at time $t$, Backward Euler chooses to evaluate it at time $t+1$ yielding the following update scheme
+
+$$ K\mathbf{y}^{t+t} = K\mathbf{y}^{t} +\Delta t\mathbf{f}\left(\mathbf{y}^{t+1}\right).$$
+
+If $\mathbf{f}$ is a linear function in $\mathbf{y}$, this update can be efficiently evaluated (you'll do it in this assignment!)
+.
 ### Attempt #4: Symplectic Euler
-**COMING SOON**
+
+[Symplectic Euler](https://en.wikipedia.org/wiki/Semi-implicit_Euler_method), so named because it preserves the area carved out by an objects phase-space trajectory, is well suited to the types of coupled, first-order ordinary differential equations we will be solving. Given the system
+
+$$\begin{eqnarray*} 
+m\dot{\mathbf{v}} &=& \mathbf{f}\left(\mathbf{x}\right) \\ 
+\dot{\mathbf{x}} &=& \mathbf{v}  
+\end{eqnarray*}, $$
+
+Symplectic Euler applies the updates
+
+$$m\mathbf{v}^{t+1} = m\mathbf{v}^{t} + \Delta t \mathbf{f}\left(\mathbf{x}^{t}\right)$$
+
+and then
+
+$$\mathbf{x}^{t+1} = \mathbf{x}^{t} + \Delta t \mathbf{v}^{t+1}.$$
 
 ## Tasks
 
@@ -229,6 +252,8 @@ Advance the mass spring system one step forward in time using the Forward Euler 
 
 ![Phase space trajectory for Forward Euler integration](images/forward_euler.gif)
 
+Forward Euler is the default integrator used by the assignment code. 
+
 ### include/runge_kutta.h
 
 Advance the mass spring system one step forward in time using the $4^{th} order$ Runge-Kutta algorithm.
@@ -245,7 +270,7 @@ Advance the mass spring system one step forward in time using the Backward Euler
 
 ![Phase space trajectory for Backward Euler integration](images/backward_euler.gif)
 
-To run the assignment code with the Runge-Kutta algorithm use
+To run the assignment code with the Backward Euler algorithm use
 
     ./a1-mass-spring-1d 'be'
 
@@ -255,7 +280,7 @@ Advance the mass spring system one step forward in time using the Symplectic Eul
 
 ![Phase space trajectory for Symplectic Euler integration](images/symplectic_euler.gif)
 
-To run the assignment code with the Runge-Kutta algorithm use
+To run the assignment code with the Symplectic Euler algorithm use
 
     ./a1-mass-spring-1d 'se'
 
