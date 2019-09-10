@@ -211,6 +211,10 @@ In this assignment we'll primarily be interested in the energetic behaviour of o
 
 Implementations of nearly any task you're asked to implemented in this course can be found online. Do not copy these and avoid googling for code; instead, search the internet for explanations. Many topics have relevant wikipedia articles. Use these as references. Always remember to cite any references in your comments.
 
+### Implementation Notes
+
+For this course most functions will be implemented in **.cpp** files. In this assignment the only exception is that time integrators are implemented in **.h** files. This is due to the use of lambda functions to pass force data to the time integration algorithms.
+
 ### src/dV_spring_particle_particle_dq.cpp
 
 Compute the derivative of the potential energy with respect to the generalized coordinates. 
