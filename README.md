@@ -78,7 +78,7 @@ If you are using Mac or Linux, then issue:
     make
 
 If you are using Windows, then running `cmake ..` should have created a Visual Studio solution file
-called `a1-mass-spring-1d.sln` that you can open and build from there. Building the raster project will generate an .exe file.
+called `a1-mass-spring-1d.sln` that you can open and build from there. Building the project will generate an .exe file.
 
 Why don't you try this right now?
 
