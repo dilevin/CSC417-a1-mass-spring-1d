@@ -1,4 +1,5 @@
 # Physics-Based Animation – Time Integration of Mass-Spring Systems in One Dimension
+[![](https://github.com/dilevin/CSC2549-a1-mass-spring-1d/workflows/Build-CSC2549-Assignment-One/badge.svg)](https://github.com/dilevin/CSC2549-a1-mass-spring-1d/actions)
 
 > **To get started:** Clone this repository and all its [submodule](https://git-scm.com/book/en/v2/Git-Tools-Submodules) dependencies using:
 > 
