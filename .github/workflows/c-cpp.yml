@@ -1,4 +1,4 @@
-name: Build-CSC2549-A1
+name: Build-CSC2549-Assignment-One
 
 on:
   push:
