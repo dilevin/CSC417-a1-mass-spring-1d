@@ -78,8 +78,8 @@ If you are using Mac or Linux, then issue:
 
     make
 
-If you are using Windows, then running `cmake ..` should have created a Visual Studio solution file
-called `a1-mass-spring-1d.sln` that you can open and build from there. Building the project will generate an .exe file.
+If you are using Windows, make sure to use `x64`. Running `cmake ..` should have created a Visual Studio solution file
+called `a1-mass-spring-1d.sln` that you can open and build from there. Building the project will generate an .exe file. Move the .exe file to the `build` folder so that links to the input mesh aren't broken.
 
 Why don't you try this right now?
 
